@@ -210,51 +210,91 @@
 
 
 
-from pydantic import BaseModel
-from typing import List
-from datetime import datetime
+# from pydantic import BaseModel
+# from typing import List
+# from datetime import datetime
 
 
 
 
-class Address(BaseModel):
-    street:str
-    city:str
-    pin_code:str
+# class Address(BaseModel):
+#     street:str
+#     city:str
+#     pin_code:str
 
+
+# class User(BaseModel):
+#     id:int
+#     name:str
+#     email: str
+#     is_active:bool=True
+#     createdAt: datetime
+#     address: Address
+#     tags: List[str]=[]
+
+# #create a user instance
+# user = User(
+#     id = 1,
+#     name =  'Vishwa',
+#     email = "Vishwa@gmail.com",
+#     createdAt = datetime(2026,3,15,12,30),
+#     address = Address(
+#         street = "something",
+#         city = "abcd",
+#         pin_code = "111111"
+#     ),
+#     is_active = False,
+#     tags = ['premium', 'subscriber']
+# )
+
+# response = user.model_dump()
+
+# print(response)
+
+# print()
+
+# json_str = user.model_dump_json()
+# print(len(json_str))
+
+
+
+
+from fastapi import FastAPI, Depends
+from pydantic import BaseModel, EmailStr
+
+
+app = FastAPI()
 
 class User(BaseModel):
-    id:int
-    name:str
-    email: str
-    is_active:bool=True
-    createdAt: datetime
-    address: Address
-    tags: List[str]=[]
+    username: str
+    email: EmailStr
+    password: str
 
-#create a user instance
-user = User(
-    id = 1,
-    name =  'Vishwa',
-    email = "Vishwa@gmail.com",
-    createdAt = datetime(2026,3,15,12,30),
-    address = Address(
-        street = "something",
-        city = "abcd",
-        pin_code = "111111"
-    ),
-    is_active = False,
-    tags = ['premium', 'subscriber']
-)
+class Settings(BaseModel)
+    app_name: str = "fastest API"
+    admin_email: str = "admin@fastest.com"
 
-response = user.model_dump()
 
-print(response)
 
-print()
+def get_settings():
+    return Settings
 
-json_str = user.model_dump_json()
-print(len(json_str))
+@app.post('/signup')
+def SignUp(user: User):
+    return {'message': f'User {user.username} signed up successfully'}
+
+
+@app.get('/settings')
+def get_settings_endpoint(settings: Settings = Depends(get_settings))
+    return settings
+
+
+
+
+
+
+
+
 
 
 
