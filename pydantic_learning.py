@@ -161,44 +161,105 @@
 
 
 
-from typing import List, Optional
+# from typing import List, Optional
+# from pydantic import BaseModel
+
+# class Address(BaseModel):
+#     street: str
+#     city: str
+#     postal_code: str
+
+# class User(BaseModel):
+#     id: int
+#     name: str
+#     address: Address
+
+# class Comment(BaseModel)
+#     id:int
+#     content: str
+#     replies: Optional[List['Comment']] = None
+
+# Comment.model_rebuild()
+
+
+# adddress = Address(
+#     street="abcd",
+#     city="efgh",
+#     postal_code='10001'
+# )
+
+# user = User(
+#     id = 1001,
+#     name='xyz',
+#     address=adddress
+# )
+
+# comment = Comment(
+#     id=102,
+#     content="first comment",
+#     replies=[
+#         Comment(id=1, content='reply1'),
+#         Comment(id=2, content='reply2')
+#     ]
+# )
+
+
+
+
+
+
+
+
 from pydantic import BaseModel
+from typing import List
+from datetime import datetime
+
+
+
 
 class Address(BaseModel):
-    street: str
-    city: str
-    postal_code: str
+    street:str
+    city:str
+    pin_code:str
+
 
 class User(BaseModel):
-    id: int
-    name: str
-    address: Address
-
-class Comment(BaseModel)
     id:int
-    content: str
-    replies: Optional[List['Comment']] = None
+    name:str
+    email: str
+    is_active:bool=True
+    createdAt: datetime
+    address: Address
+    tags: List[str]=[]
 
-Comment.model_rebuild()
-
-
-adddress = Address(
-    street="abcd",
-    city="efgh",
-    postal_code='10001'
-)
-
+#create a user instance
 user = User(
-    id = 1001,
-    name='xyz',
-    address=adddress
+    id = 1,
+    name =  'Vishwa',
+    email = "Vishwa@gmail.com",
+    createdAt = datetime(2026,3,15,12,30),
+    address = Address(
+        street = "something",
+        city = "abcd",
+        pin_code = "111111"
+    ),
+    is_active = False,
+    tags = ['premium', 'subscriber']
 )
 
-comment = Comment(
-    id=102,
-    content="first comment",
-    replies=[
-        Comment(id=1, content='reply1'),
-        Comment(id=2, content='reply2')
-    ]
-)
+response = user.model_dump()
+
+print(response)
+
+print()
+
+json_str = user.model_dump_json()
+print(len(json_str))
+
+
+
+
+
+
+
+
