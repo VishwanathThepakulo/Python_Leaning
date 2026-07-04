@@ -292,37 +292,71 @@
 
 
 
+# from datetime import datetime
+# from pydantic import BaseModel
+
+# class User(BaseModel):
+#     id: int
+#     name: str
+#     signup_ts: datetime
+
+# user = User(
+#     id = 123,
+#     name = "vishwa",
+#     signup_ts=datetime(2026,7,4,12,0)
+# )
+
+
+# # 1. model_dump()
+# python_dict = user.model_dump(mode="json")
+# print(type(python_dict['id']))
+# print(python_dict["id"])
+
+
+
+# # 2. model_dump_json()
+# json_string = user.model_dump_json()
+# print(type(json_string))  # <class 'str'>
+# print(json_string)
+
+# # or 
+# import json
+# user_dict = json.loads(json_string)
+# print(user_dict['name'])
+
+
+
+# ===============Model Validator===================
+
+# model_validate is exactly opposite to model_dump()
+
+# [ Pydantic Model ]  ─── model_dump() ───►  [ Python Dict ]
+# [ Pydantic Model ]  ◄─── model_validate() ─  [ Python Dict ]
+
 from datetime import datetime
-from pydantic import BaseModel
+from pydantic import BaseModel, ValidationError
+
 
 class User(BaseModel):
     id: int
     name: str
     signup_ts: datetime
 
-user = User(
-    id = 123,
-    name = "vishwa",
-    signup_ts=datetime(2026,7,4,12,0)
-)
+incoming_data={
+    'id':"234",
+    "name": "Bob",
+    "signup_ts": "2026-07-04 18:00:00"
+}
 
 
-# 1. model_dump()
-python_dict = user.model_dump(mode="json")
-print(type(python_dict['id']))
-print(python_dict["id"])
+try:
+    user_instance = User.model_validate(incoming_data)
+    print(type(user_instance))
+    print(user_instance.id)
+    print(type(user_instance.signup_ts))
+except ValidationError as e:
+    print("Data was invalid! ", e)
 
-
-
-# 2. model_dump_json()
-json_string = user.model_dump_json()
-print(type(json_string))  # <class 'str'>
-print(json_string)
-
-# or 
-import json
-user_dict = json.loads(json_string)
-print(user_dict['name'])
 
 
 
