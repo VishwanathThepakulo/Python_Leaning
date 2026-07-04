@@ -259,45 +259,70 @@
 
 
 
-from fastapi import FastAPI, Depends
-from pydantic import BaseModel, EmailStr
+# from fastapi import FastAPI, Depends
+# from pydantic import BaseModel, EmailStr
 
 
-app = FastAPI()
+# app = FastAPI()
+
+# class User(BaseModel):
+#     username: str
+#     email: EmailStr
+#     password: str
+
+# class Settings(BaseModel)
+#     app_name: str = "fastest API"
+#     admin_email: str = "admin@fastest.com"
+
+
+
+# def get_settings():
+#     return Settings
+
+# @app.post('/signup')
+# def SignUp(user: User):
+#     return {'message': f'User {user.username} signed up successfully'}
+
+
+# @app.get('/settings')
+# def get_settings_endpoint(settings: Settings = Depends(get_settings))
+#     return settings
+
+
+
+
+
+from datetime import datetime
+from pydantic import BaseModel
 
 class User(BaseModel):
-    username: str
-    email: EmailStr
-    password: str
+    id: int
+    name: str
+    signup_ts: datetime
 
-class Settings(BaseModel)
-    app_name: str = "fastest API"
-    admin_email: str = "admin@fastest.com"
-
-
-
-def get_settings():
-    return Settings
-
-@app.post('/signup')
-def SignUp(user: User):
-    return {'message': f'User {user.username} signed up successfully'}
+user = User(
+    id = 123,
+    name = "vishwa",
+    signup_ts=datetime(2026,7,4,12,0)
+)
 
 
-@app.get('/settings')
-def get_settings_endpoint(settings: Settings = Depends(get_settings))
-    return settings
+# 1. model_dump()
+python_dict = user.model_dump(mode="json")
+print(type(python_dict['id']))
+print(python_dict["id"])
 
 
 
+# 2. model_dump_json()
+json_string = user.model_dump_json()
+print(type(json_string))  # <class 'str'>
+print(json_string)
 
-
-
-
-
-
-
-
+# or 
+import json
+user_dict = json.loads(json_string)
+print(user_dict['name'])
 
 
 
